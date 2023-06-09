@@ -1,0 +1,2 @@
+dotnet ef migrations add mig_1
+dotnet ef database update
