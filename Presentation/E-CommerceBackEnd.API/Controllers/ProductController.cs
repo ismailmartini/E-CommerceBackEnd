@@ -24,7 +24,7 @@ namespace E_CommerceBackEnd.API.Controllers
         {
            Product p = await _productReadRepository.GetByIdAsync("312bfb55-582c-4451-aa32-ae22b34bd1cc");
 
-            p.Name = "test product interceptor - ";
+            p.Name = "test product interceptor  ";
             await _productWriteRepository.SaveAsync();  
 
         }
