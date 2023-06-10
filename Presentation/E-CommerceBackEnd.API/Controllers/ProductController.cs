@@ -19,7 +19,7 @@ namespace E_CommerceBackEnd.API.Controllers
         }
 
         [HttpGet]
-        public async void Get() {
+        public async Task Get() {
             await _productWriteRepository.AddRangeAsync(new()
             {
                 new() {Id=Guid.NewGuid(),Name="test 1",Price=10,Stock=1,CreatedDate=DateTime.UtcNow},
@@ -34,3 +34,4 @@ namespace E_CommerceBackEnd.API.Controllers
         }
     }
 }
+ 

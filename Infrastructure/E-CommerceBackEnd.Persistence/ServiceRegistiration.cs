@@ -14,11 +14,11 @@ namespace E_CommerceBackEnd.Persistence
 {
     public static class ServiceRegistiration
     {
+        //add ioc container
 
         public static void AddPersistanceServices(this IServiceCollection services)
         {
-         services.AddDbContext<ECommerceBackEndDbContext>(options=>options.UseNpgsql(Configuration.ConnectionString)
-         ,ServiceLifetime.Singleton);
+         services.AddDbContext<ECommerceBackEndDbContext>(options=>options.UseNpgsql(Configuration.ConnectionString));
          services.AddScoped<ICostumerReadRepository,CustomerReadRepository>(); 
          services.AddScoped<ICustomerWriteRepository,CustomerWriteRepository>(); 
          services.AddScoped<IOrderReadRepository,OrderReadRepository>(); 
