@@ -13,5 +13,8 @@ namespace E_CommerceBackEnd.Domain.Entities.Common
         public DateTime CreatedDate { get; set; }   
         public DateTime UpdatedDate { get; set; }   
 
+
+
+
     }
 }

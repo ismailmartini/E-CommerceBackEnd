@@ -9,7 +9,7 @@ namespace E_CommerceBackEnd.Domain.Entities
 {
     public class Order:BaseEntities
     {
-        public int CustomerId { get; set; }
+        public Guid CustomerId { get; set; }
         public string Description { get; set; }
 
         public string Adress { get; set; }
