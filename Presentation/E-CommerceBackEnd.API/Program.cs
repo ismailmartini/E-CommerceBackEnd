@@ -3,12 +3,21 @@ using E_CommerceBackEnd.Persistence;
 using E_CommerceBackEnd.Application.Validators.Products;
 using E_CommerceBackEnd.Infrastructure.Filters;
 using E_CommerceBackEnd.Infrastructure;
+using E_CommerceBackEnd.Infrastructure.Services.Storage.Local;
+using E_CommerceBackEnd.Infrastructure.Services.Storage.Azure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddPersistanceServices();
 builder.Services.AddInfrastructureServices();
+
+//builder.Services.AddStorage<AzureStorage>(); // use localStorage or AWS or Amazon
+
+builder.Services.AddStorage<LocalStorage>();  
+
+//builder.Services.AddStorage(E_CommerceBackEnd.Infrastructure.Enums.StorageType.Azure); // use localStorage or AWS or Amazon
+
 
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
 policy.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader().AllowAnyMethod()

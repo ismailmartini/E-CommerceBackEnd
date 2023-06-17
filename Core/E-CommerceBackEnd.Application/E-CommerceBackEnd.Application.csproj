@@ -18,4 +18,8 @@
     <ProjectReference Include="..\E-CommerceBackEnd.Domain\E-CommerceBackEnd.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Abstractions\Storage\AWS\" />
+  </ItemGroup>
+
 </Project>
