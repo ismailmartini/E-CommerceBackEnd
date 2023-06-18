@@ -9,6 +9,8 @@ namespace E_CommerceBackEnd.Domain.Entities
     public class ProductImageFile:File
     {
         //ef core table per hierarchy
-         
+
+
+        public ICollection<Product> Products { get; set; }
     }
 }

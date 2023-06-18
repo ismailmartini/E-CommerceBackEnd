@@ -2,7 +2,7 @@
 {
     public interface IStorageService:IStorage
     {
-        public string StoreName { get; }
+        public string StorageName { get; }
         
     }
 }

@@ -16,5 +16,6 @@ namespace E_CommerceBackEnd.Domain.Entities
 
 
         public ICollection<Order> Orders { get; set; }
+        public ICollection<ProductImageFile> ProductImageFiles { get; set; }
     }
 }
