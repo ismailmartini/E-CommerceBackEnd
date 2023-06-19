@@ -1,7 +1,7 @@
 ﻿using E_CommerceBackEnd.Application.Abstractions.Storage;
 using E_CommerceBackEnd.Application.Repositories;
 using E_CommerceBackEnd.Application.RequestParameters;
- 
+
 using E_CommerceBackEnd.Application.ViewModels.Products;
 using E_CommerceBackEnd.Domain.Entities;
 using Microsoft.AspNetCore.Http;
@@ -9,8 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Microsoft.EntityFrameworkCore;
 using MediatR;
-using E_CommerceBackEnd.Application.Features.Queries.GetAllProduct;
-using E_CommerceBackEnd.Application.Features.Commands.Createproduct;
+using E_CommerceBackEnd.Application.Features.Commands.Product.Createproduct;
+using E_CommerceBackEnd.Application.Features.Queries.Product.GetAllProduct;
+using E_CommerceBackEnd.Application.Features.Queries.Product.GetProductById;
+using E_CommerceBackEnd.Application.Features.Commands.Product.UpdateProduct;
+using E_CommerceBackEnd.Application.Features.Commands.Product.RemoveProduct;
 
 namespace E_CommerceBackEnd.API.Controllers
 {
@@ -59,10 +62,11 @@ namespace E_CommerceBackEnd.API.Controllers
           GetAllProductQueryResponse response=  await _mediator.Send(getAllProductQueryRequest);
             return Ok(response);
         }
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> Get([FromRoute]GetProductByIdQueryRequest getProductByIdQueryRequest)
         {
-            return Ok(await _productReadRepository.GetByIdAsync(id,false));
+           GetProductByIdQueryResponse response=  await _mediator.Send(getProductByIdQueryRequest);
+            return Ok(response);
         }
 
         [HttpPost]
@@ -73,24 +77,19 @@ namespace E_CommerceBackEnd.API.Controllers
             return StatusCode((int)HttpStatusCode.Created);
         }
         [HttpPut]
-        public async Task<IActionResult> Put(VM_Update_Product model)
+        public async Task<IActionResult> Put([FromBody] UpdateProductCommandRequest updateProductCommandRequest)
         {
 
-            Product product =await _productReadRepository.GetByIdAsync(model.Id);
-            product.Stock=model.Stock;
-            product.Name=model.Name;
-            product.Price=model.Price;
-            await _productWriteRepository.SaveAsync();
+           UpdateProductCommandResponse response= await _mediator.Send(updateProductCommandRequest);
             return Ok();
         }
 
 
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id)
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> Delete([FromRoute] RemoveProductCommandRequest removeProductCommandRequest)
         {
-            await _productWriteRepository.RemoveAsync(id);
-            await _productWriteRepository.SaveAsync();
+            RemoveProductCommandResponse response = await _mediator.Send(removeProductCommandRequest);
             return Ok(); 
         }
 

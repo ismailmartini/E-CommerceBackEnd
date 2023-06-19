@@ -5,12 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace E_CommerceBackEnd.Application.Features.Commands.Createproduct
+namespace E_CommerceBackEnd.Application.Features.Commands.Product.UpdateProduct
 {
-    public class CreateProductCommandRequest:IRequest<CreateProductCommandResponse>
+    public class UpdateProductCommandRequest:IRequest<UpdateProductCommandResponse>
     {
+        public string Id { get; set; }
         public string Name { get; set; }
         public int Stock { get; set; }
         public float Price { get; set; }
+
     }
 }

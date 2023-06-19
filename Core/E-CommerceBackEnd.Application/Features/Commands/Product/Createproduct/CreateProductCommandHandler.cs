@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace E_CommerceBackEnd.Application.Features.Commands.Createproduct
+namespace E_CommerceBackEnd.Application.Features.Commands.Product.Createproduct
 {
     public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandRequest, CreateProductCommandResponse>
     {
@@ -15,7 +15,7 @@ namespace E_CommerceBackEnd.Application.Features.Commands.Createproduct
 
         public CreateProductCommandHandler(IProductWriteRepository productWriteRepository)
         {
-            _productWriteRepository= productWriteRepository;
+            _productWriteRepository = productWriteRepository;
         }
         public async Task<CreateProductCommandResponse> Handle(CreateProductCommandRequest request, CancellationToken cancellationToken)
         {

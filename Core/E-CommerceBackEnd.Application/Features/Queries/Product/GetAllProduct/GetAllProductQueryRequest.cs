@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace E_CommerceBackEnd.Application.Features.Queries.GetAllProduct
+namespace E_CommerceBackEnd.Application.Features.Queries.Product.GetAllProduct
 {
-    public class GetAllProductQueryRequest:IRequest<GetAllProductQueryResponse>
+    public class GetAllProductQueryRequest : IRequest<GetAllProductQueryResponse>
     {
         //  public Pagination pagination { get; set; }
 
