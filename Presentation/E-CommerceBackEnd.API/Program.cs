@@ -5,12 +5,14 @@ using E_CommerceBackEnd.Infrastructure.Filters;
 using E_CommerceBackEnd.Infrastructure;
 using E_CommerceBackEnd.Infrastructure.Services.Storage.Local;
 using E_CommerceBackEnd.Infrastructure.Services.Storage.Azure;
+using E_CommerceBackEnd.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddPersistanceServices();
 builder.Services.AddInfrastructureServices();
+builder.Services.AddApplicationServices();
 
 //builder.Services.AddStorage<AzureStorage>(); // use localStorage or AWS or Amazon
 

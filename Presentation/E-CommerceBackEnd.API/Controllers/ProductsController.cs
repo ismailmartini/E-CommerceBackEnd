@@ -8,6 +8,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Microsoft.EntityFrameworkCore;
+using MediatR;
+using E_CommerceBackEnd.Application.Features.Queries.GetAllProduct;
+using E_CommerceBackEnd.Application.Features.Commands.Createproduct;
+
 namespace E_CommerceBackEnd.API.Controllers
 {
     [Route("api/[controller]")]
@@ -18,20 +22,20 @@ namespace E_CommerceBackEnd.API.Controllers
         readonly private IProductWriteRepository _productWriteRepository;
         readonly private IProductReadRepository _productReadRepository;
         readonly private IWebHostEnvironment _webHostEnvironment;
-        
+
         readonly private IFileWriteRepository _fileWriteRepository;
         readonly private IFileReadRepository _fileReadRepository;
 
-        readonly private IProductImageFileReadRepository _productImageFileReadRepository;   
+        readonly private IProductImageFileReadRepository _productImageFileReadRepository;
         readonly private IProductImageFileWriteRepository _productImageFileWriteRepository;
-        readonly private IInvoiceFileReadRepository _invoiceFileReadRepository; 
-        readonly private IInvoiceFileWriteRepository    _invoiceFileWriteRepository;
+        readonly private IInvoiceFileReadRepository _invoiceFileReadRepository;
+        readonly private IInvoiceFileWriteRepository _invoiceFileWriteRepository;
 
-        readonly private IStorageService _storageService; 
+        readonly private IStorageService _storageService;
         readonly private IConfiguration _configuration;
 
-
-        public ProductsController(IStorageService storageService,IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IWebHostEnvironment webHostEnvironment, IFileWriteRepository fileWriteRepository, IFileReadRepository fileReadRepository, IProductImageFileReadRepository productImageFileReadRepository, IProductImageFileWriteRepository productImageFileWriteRepository, IInvoiceFileReadRepository invoiceFileReadRepository, IInvoiceFileWriteRepository invoiceFileWriteRepository, IConfiguration configuration)
+        readonly IMediator _mediator;
+        public ProductsController(IMediator mediator, IStorageService storageService, IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IWebHostEnvironment webHostEnvironment, IFileWriteRepository fileWriteRepository, IFileReadRepository fileReadRepository, IProductImageFileReadRepository productImageFileReadRepository, IProductImageFileWriteRepository productImageFileWriteRepository, IInvoiceFileReadRepository invoiceFileReadRepository, IInvoiceFileWriteRepository invoiceFileWriteRepository, IConfiguration configuration)
         {
             _productWriteRepository = productWriteRepository;
             _productReadRepository = productReadRepository;
@@ -45,28 +49,15 @@ namespace E_CommerceBackEnd.API.Controllers
             _invoiceFileWriteRepository = invoiceFileWriteRepository;
             _storageService = storageService;
             _configuration = configuration;
+
+            _mediator = mediator;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery]Pagination pagination) 
+        public async Task<IActionResult> Get([FromQuery] GetAllProductQueryRequest getAllProductQueryRequest) 
         {
-            var totalCount = _productReadRepository.GetAll(false).Count();
-            var products=_productReadRepository.GetAll(false).Skip(pagination.Page * pagination.Size).Take( pagination.Size)
-                .Select(p => new
-            {
-                p.Id,
-                p.Name,
-                p.Price,
-                p.Stock,
-                p.CreatedDate,
-                p.UpdatedDate
-
-            }).ToList();
-            return Ok(new
-            {
-                products,
-                totalCount
-            });
+          GetAllProductQueryResponse response=  await _mediator.Send(getAllProductQueryRequest);
+            return Ok(response);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
@@ -75,17 +66,10 @@ namespace E_CommerceBackEnd.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(VM_Create_Product model)
+        public async Task<IActionResult> Post(CreateProductCommandRequest createProductCommandRequest)
         {
-            
-            //test
-            await _productWriteRepository.AddAsync(new Product
-            {
-                Name = model.Name,
-                Price = model.Price,
-                Stock = model.Stock
-            });
-            await _productWriteRepository.SaveAsync();
+           CreateProductCommandResponse response=  await _mediator.Send(createProductCommandRequest);           
+             
             return StatusCode((int)HttpStatusCode.Created);
         }
         [HttpPut]
