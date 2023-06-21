@@ -14,6 +14,10 @@ using E_CommerceBackEnd.Application.Features.Queries.Product.GetAllProduct;
 using E_CommerceBackEnd.Application.Features.Queries.Product.GetProductById;
 using E_CommerceBackEnd.Application.Features.Commands.Product.UpdateProduct;
 using E_CommerceBackEnd.Application.Features.Commands.Product.RemoveProduct;
+using E_CommerceBackEnd.Application.Features.Commands.ProductImageFile.UploadProductImage;
+using E_CommerceBackEnd.Application.Features.Commands.ProductImageFile.RemoveProductImage;
+using static System.Net.Mime.MediaTypeNames;
+using E_CommerceBackEnd.Application.Features.Queries.ProductImageFile.GetProductImages;
 
 namespace E_CommerceBackEnd.API.Controllers
 {
@@ -94,60 +98,26 @@ namespace E_CommerceBackEnd.API.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Upload(string id)
+        public async Task<IActionResult> Upload([FromQuery,FromForm] UploadProductImageCommandRequest uploadProductImageCommandRequest)
         {
-          List<(string fileName,string pathOrContainerName)> result= await _storageService.UploadAsync("photo-images", Request.Form.Files);
-
-
-           Product product= await _productReadRepository.GetByIdAsync(id);
-
-            //foreach (var r in result)
-            //{
-            //    product.ProductImageFiles.Add(new()
-            //    {
-            //        FileName = r.fileName,
-            //        Path = r.pathOrContainerName,
-            //        Storage = _storageService.StorageName,
-            //        Products = new List<Product>() { product }
-
-            //    });
-            //}
-
-           await _productImageFileWriteRepository.AddRangeAsync(result.Select(r => new ProductImageFile
-            {
-               FileName=r.fileName,
-               Path=r.pathOrContainerName,
-               Storage=_storageService.StorageName,
-               Products=new List<Product>() { product}
-               
-            }).ToList());
-
-            _productImageFileWriteRepository.SaveAsync();
+            uploadProductImageCommandRequest.Files = Request.Form.Files;
+           UploadProductImageCommandResponse response= await _mediator.Send(uploadProductImageCommandRequest);
             return Ok();
         }
 
 
-        [HttpGet("[action]/{id}")]
-        public async Task<IActionResult> GetProductImages(string id)
+        [HttpGet("[action]/{Id}")]
+        public async Task<IActionResult> GetProductImages([FromRoute] GetProductImagesQueryRequest getProductImagesQueryRequest)
         {
-            Product? product = await _productReadRepository.Table.Include(p => p.ProductImageFiles)
-                    .FirstOrDefaultAsync(p => p.Id == Guid.Parse(id));
-            return Ok(product.ProductImageFiles.Select(p => new
-            {
-                Path = $"{_configuration["BaseStorageUrl"]}/{p.Path}",
-                p.FileName,
-                p.Id
-            }));
+            List<GetProductImagesQueryResponse> response = await _mediator.Send(getProductImagesQueryRequest);
+            return Ok(response);
         }
-        [HttpDelete("[action]/{id}")]
-        public async Task<IActionResult> DeleteProductImage(string id, string imageId)
+        [HttpDelete("[action]/{Id}")]
+        public async Task<IActionResult> DeleteProductImage([FromQuery,FromRoute] RemoveProductImageCommandRequest removeProductImageCommandRequest, [FromQuery] string imageId)
         {
-            Product? product = await _productReadRepository.Table.Include(p => p.ProductImageFiles)
-                  .FirstOrDefaultAsync(p => p.Id == Guid.Parse(id));
+            removeProductImageCommandRequest.ImageId = imageId;
 
-            ProductImageFile productImageFile = product.ProductImageFiles.FirstOrDefault(p => p.Id == Guid.Parse(imageId));
-            product.ProductImageFiles.Remove(productImageFile);
-            await _productWriteRepository.SaveAsync();
+            RemoveProductImageCommandResponse response = await _mediator.Send(removeProductImageCommandRequest); 
             return Ok();
         }
 
