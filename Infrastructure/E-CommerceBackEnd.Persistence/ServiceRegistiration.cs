@@ -1,4 +1,5 @@
 ﻿using E_CommerceBackEnd.Application.Repositories;
+using E_CommerceBackEnd.Domain.Entities.Identity;
 using E_CommerceBackEnd.Persistence.Contexts;
 using E_CommerceBackEnd.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,15 @@ namespace E_CommerceBackEnd.Persistence
         public static void AddPersistanceServices(this IServiceCollection services)
         {
          services.AddDbContext<ECommerceBackEndDbContext>(options=>options.UseNpgsql(Configuration.ConnectionString));
+         services.AddIdentity<AppUser, AppRole>(options =>
+         {
+             options.Password.RequiredLength = 6;
+             options.Password.RequireNonAlphanumeric=false;
+             options.Password.RequireDigit=false;
+             options.Password.RequireLowercase=false;
+             options.Password.RequireUppercase=false;
+              
+         }).AddEntityFrameworkStores<ECommerceBackEndDbContext>();
          services.AddScoped<ICostumerReadRepository,CustomerReadRepository>(); 
          services.AddScoped<ICustomerWriteRepository,CustomerWriteRepository>(); 
          services.AddScoped<IOrderReadRepository,OrderReadRepository>(); 
