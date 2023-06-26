@@ -18,11 +18,14 @@ using E_CommerceBackEnd.Application.Features.Commands.ProductImageFile.UploadPro
 using E_CommerceBackEnd.Application.Features.Commands.ProductImageFile.RemoveProductImage;
 using static System.Net.Mime.MediaTypeNames;
 using E_CommerceBackEnd.Application.Features.Queries.ProductImageFile.GetProductImages;
+using Microsoft.AspNetCore.Authorization;
 
 namespace E_CommerceBackEnd.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Admin")]
+
     public class ProductsController : ControllerBase
     {
 

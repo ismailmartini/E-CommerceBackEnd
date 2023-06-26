@@ -1,4 +1,6 @@
 ﻿using E_CommerceBackEnd.Application.Features.Commands.AppUser.CreateUser;
+using E_CommerceBackEnd.Application.Features.Commands.AppUser.FacebookLogin;
+using E_CommerceBackEnd.Application.Features.Commands.AppUser.GoogleLogin;
 using E_CommerceBackEnd.Application.Features.Commands.AppUser.LoginUser;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -25,12 +27,7 @@ namespace E_CommerceBackEnd.API.Controllers
 
             return Ok(response);
         }
-
-        [HttpPost("[action]")]
-        public async Task<IActionResult> Login(LoginUserCommandRequest loginUserCommandRequest)
-        {
-            LoginUserCommandResponse response = await _mediator.Send(loginUserCommandRequest);
-            return Ok(response);
-        }
+  
+       
     }
 }

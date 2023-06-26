@@ -1,4 +1,6 @@
-﻿using E_CommerceBackEnd.Application.Exceptions;
+﻿using E_CommerceBackEnd.Application.Abstractions.Services;
+using E_CommerceBackEnd.Application.DTOs.User;
+using E_CommerceBackEnd.Application.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
@@ -6,34 +8,29 @@ namespace E_CommerceBackEnd.Application.Features.Commands.AppUser.CreateUser
 {
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommandRequest, CreateUserCommandResponse>
     {
-        readonly UserManager<Domain.Entities.Identity.AppUser> _userManager;
+       readonly IUserService _userService;
 
-        public CreateUserCommandHandler(UserManager<Domain.Entities.Identity.AppUser> userManager )
+        public CreateUserCommandHandler(IUserService userService)
         {
-            _userManager = userManager;
+            _userService = userService;
         }
 
         public async Task<CreateUserCommandResponse> Handle(CreateUserCommandRequest request, CancellationToken cancellationToken)
         {
-           IdentityResult result= await _userManager.CreateAsync(new()
+
+           CreateUserResponse response =await _userService.CreateAsync(new()
             {
-                Id=Guid.NewGuid().ToString(),
-                UserName = request.UserName,
                 Email = request.Email,
-                NameSurname=request.NameSurname
-            }, request.Password);
-
-            CreateUserCommandResponse response = new() { Succeeded = result.Succeeded };
-
-            if (result.Succeeded)
-                response.Message = "Kullanıcı Başarıyla Oluşturulmuştur.";
-            else
-                 foreach (var err in result.Errors)
-                {
-                    response.Message += $"{err.Code} - {err.Description} ";
-                }
-                
-           return response;
+                NameSurname = request.NameSurname,
+                Password = request.Password,
+                PasswordConfirm = request.PasswordConfirm,
+                UserName = request.UserName,
+            });
+           return new()
+           {
+               Message = response.Message,
+               Succeeded=response.Succeeded
+           };
           //  throw new UserCreateFailedException();
                 
 

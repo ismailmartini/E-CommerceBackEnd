@@ -15,6 +15,7 @@ namespace E_CommerceBackEnd.Application
         public static void AddApplicationServices(this IServiceCollection collection)
         {
             collection.AddMediatR(typeof(ServiceRegistration)); //ServiceRegistration assemblysindeki dahil bütün handle request vb otomatik bul 
+            collection.AddHttpClient();
         }
 
     }

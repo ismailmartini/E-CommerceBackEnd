@@ -1,9 +1,11 @@
 ﻿
 using E_CommerceBackEnd.Application.Abstractions.Storage;
+using E_CommerceBackEnd.Application.Abstractions.Token;
 using E_CommerceBackEnd.Infrastructure.Enums;
 using E_CommerceBackEnd.Infrastructure.Services.Storage;
 using E_CommerceBackEnd.Infrastructure.Services.Storage.Azure;
 using E_CommerceBackEnd.Infrastructure.Services.Storage.Local;
+using E_CommerceBackEnd.Infrastructure.Services.Token;
 using ETicaretAPI.Infrastructure.Services.Storage;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,6 +16,7 @@ namespace E_CommerceBackEnd.Infrastructure
         public static void AddInfrastructureServices(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IStorageService, StorageService>();
+            serviceCollection.AddScoped<ITokenHandler, TokenHandler>();
         }
 
         public static void AddStorage<T>(this IServiceCollection serviceCollection) where T : Storage, IStorage
