@@ -25,6 +25,7 @@
     <ProjectReference Include="..\..\Core\E-CommerceBackEnd.Application\E-CommerceBackEnd.Application.csproj" />
     <ProjectReference Include="..\..\Infrastructure\E-CommerceBackEnd.Infrastructure\E-CommerceBackEnd.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Infrastructure\E-CommerceBackEnd.Persistence\E-CommerceBackEnd.Persistence.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\E-CommerceBackEnd.SignalR\E-CommerceBackEnd.SignalR.csproj" />
   </ItemGroup>
 
   <ItemGroup>

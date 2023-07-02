@@ -17,6 +17,8 @@ using Serilog.Context;
 using E_CommerceBackEnd.API.Configurations.ColumnWriters;
 using Microsoft.AspNetCore.HttpLogging;
 using E_CommerceBackEnd.API.Extensions;
+using E_CommerceBackEnd.SignalR;
+using E_CommerceBackEnd.SignalR.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +26,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddPersistanceServices();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddApplicationServices();
-
+builder.Services.AddSignalRServices();
+ 
 //builder.Services.AddStorage<AzureStorage>(); // use localStorage or AWS or Amazon
 
 builder.Services.AddStorage<LocalStorage>();
@@ -84,11 +87,10 @@ builder.Services.AddHttpLogging(logging =>
 
 
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
-policy.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader().AllowAnyMethod()
+policy.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowCredentials()
 ));
 builder.Services.AddControllers(options=>options.Filters.Add<ValidationFilter>())
     .AddFluentValidation(configuraiton => configuraiton.RegisterValidatorsFromAssemblyContaining<CreateProductValidator>())//bir validator verdiğimzide hepsini alıcak
-
     .ConfigureApiBehaviorOptions(options=>options.SuppressModelStateInvalidFilter=true); //controller'dan önceki mevcut olan filtreleri çalıştırma
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -122,4 +124,6 @@ app.Use(async (context, next) =>
 
 app.MapControllers();
 
+//app.MapHub<ProductHub>(""); tek tek hub eklemiyeceğiz extension ile topluca ekliyoruz
+app.MapHubs();
 app.Run();
