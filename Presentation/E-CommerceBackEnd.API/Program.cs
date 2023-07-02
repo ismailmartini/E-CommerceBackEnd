@@ -16,6 +16,7 @@ using System.Security.Claims;
 using Serilog.Context;
 using E_CommerceBackEnd.API.Configurations.ColumnWriters;
 using Microsoft.AspNetCore.HttpLogging;
+using E_CommerceBackEnd.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -101,9 +102,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.ConfigureExceptionHandler<Program>(app.Services.GetRequiredService<ILogger<Program>>()); //exception için middleware yazdık
+
 app.UseStaticFiles();
-
-
 app.UseSerilogRequestLogging(); //kod blogu altındaki middle warelerın loglanmasını sağlayacak
 app.UseHttpLogging();//microsoft full http logları
 app.UseCors();
