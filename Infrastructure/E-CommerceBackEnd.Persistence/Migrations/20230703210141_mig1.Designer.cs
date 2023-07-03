@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace E_CommerceBackEnd.Persistence.Migrations
 {
     [DbContext(typeof(ECommerceBackEndDbContext))]
-    [Migration("20230626224308_mig14")]
-    partial class mig14
+    [Migration("20230703210141_mig1")]
+    partial class mig1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

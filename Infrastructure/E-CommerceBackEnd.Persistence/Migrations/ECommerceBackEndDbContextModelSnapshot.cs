@@ -384,6 +384,9 @@ namespace E_CommerceBackEnd.Persistence.Migrations
                 {
                     b.HasBaseType("E_CommerceBackEnd.Domain.Entities.File");
 
+                    b.Property<bool>("Showcase")
+                        .HasColumnType("boolean");
+
                     b.HasDiscriminator().HasValue("ProductImageFile");
                 });
 

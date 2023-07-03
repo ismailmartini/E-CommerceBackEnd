@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace E_CommerceBackEnd.Persistence.Migrations
 {
     [DbContext(typeof(ECommerceBackEndDbContext))]
-    [Migration("20230624140302_mig12")]
-    partial class mig12
+    [Migration("20230703210223_mig2")]
+    partial class mig2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -151,6 +151,12 @@ namespace E_CommerceBackEnd.Persistence.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("RefreshTokenEndDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
@@ -380,6 +386,9 @@ namespace E_CommerceBackEnd.Persistence.Migrations
             modelBuilder.Entity("E_CommerceBackEnd.Domain.Entities.ProductImageFile", b =>
                 {
                     b.HasBaseType("E_CommerceBackEnd.Domain.Entities.File");
+
+                    b.Property<bool>("Showcase")
+                        .HasColumnType("boolean");
 
                     b.HasDiscriminator().HasValue("ProductImageFile");
                 });

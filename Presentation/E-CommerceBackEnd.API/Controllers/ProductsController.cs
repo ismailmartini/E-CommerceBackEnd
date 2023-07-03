@@ -19,46 +19,21 @@ using E_CommerceBackEnd.Application.Features.Commands.ProductImageFile.RemovePro
 using static System.Net.Mime.MediaTypeNames;
 using E_CommerceBackEnd.Application.Features.Queries.ProductImageFile.GetProductImages;
 using Microsoft.AspNetCore.Authorization;
+using E_CommerceBackEnd.Application.Features.Commands.ChangeShowcaseImage;
 
 namespace E_CommerceBackEnd.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Admin")]
+  
 
     public class ProductsController : ControllerBase
-    {
-
-        readonly private IProductWriteRepository _productWriteRepository;
-        readonly private IProductReadRepository _productReadRepository;
-        readonly private IWebHostEnvironment _webHostEnvironment;
-
-        readonly private IFileWriteRepository _fileWriteRepository;
-        readonly private IFileReadRepository _fileReadRepository;
-
-        readonly private IProductImageFileReadRepository _productImageFileReadRepository;
-        readonly private IProductImageFileWriteRepository _productImageFileWriteRepository;
-        readonly private IInvoiceFileReadRepository _invoiceFileReadRepository;
-        readonly private IInvoiceFileWriteRepository _invoiceFileWriteRepository;
-
-        readonly private IStorageService _storageService;
-        readonly private IConfiguration _configuration;
+    { 
 
         readonly IMediator _mediator;
-        public ProductsController(IMediator mediator, IStorageService storageService, IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IWebHostEnvironment webHostEnvironment, IFileWriteRepository fileWriteRepository, IFileReadRepository fileReadRepository, IProductImageFileReadRepository productImageFileReadRepository, IProductImageFileWriteRepository productImageFileWriteRepository, IInvoiceFileReadRepository invoiceFileReadRepository, IInvoiceFileWriteRepository invoiceFileWriteRepository, IConfiguration configuration)
+        public ProductsController(IMediator mediator )
         {
-            _productWriteRepository = productWriteRepository;
-            _productReadRepository = productReadRepository;
-            _webHostEnvironment = webHostEnvironment;
-
-            _fileWriteRepository = fileWriteRepository;
-            _fileReadRepository = fileReadRepository;
-            _productImageFileReadRepository = productImageFileReadRepository;
-            _productImageFileWriteRepository = productImageFileWriteRepository;
-            _invoiceFileReadRepository = invoiceFileReadRepository;
-            _invoiceFileWriteRepository = invoiceFileWriteRepository;
-            _storageService = storageService;
-            _configuration = configuration;
+            
 
             _mediator = mediator;
         }
@@ -77,6 +52,7 @@ namespace E_CommerceBackEnd.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> Post(CreateProductCommandRequest createProductCommandRequest)
         {
            CreateProductCommandResponse response=  await _mediator.Send(createProductCommandRequest);           
@@ -84,6 +60,7 @@ namespace E_CommerceBackEnd.API.Controllers
             return StatusCode((int)HttpStatusCode.Created);
         }
         [HttpPut]
+        [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> Put([FromBody] UpdateProductCommandRequest updateProductCommandRequest)
         {
 
@@ -94,6 +71,7 @@ namespace E_CommerceBackEnd.API.Controllers
 
 
         [HttpDelete("{Id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> Delete([FromRoute] RemoveProductCommandRequest removeProductCommandRequest)
         {
             RemoveProductCommandResponse response = await _mediator.Send(removeProductCommandRequest);
@@ -101,6 +79,7 @@ namespace E_CommerceBackEnd.API.Controllers
         }
 
         [HttpPost("[action]")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> Upload([FromQuery,FromForm] UploadProductImageCommandRequest uploadProductImageCommandRequest)
         {
             uploadProductImageCommandRequest.Files = Request.Form.Files;
@@ -116,6 +95,7 @@ namespace E_CommerceBackEnd.API.Controllers
             return Ok(response);
         }
         [HttpDelete("[action]/{Id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> DeleteProductImage([FromQuery,FromRoute] RemoveProductImageCommandRequest removeProductImageCommandRequest, [FromQuery] string imageId)
         {
             removeProductImageCommandRequest.ImageId = imageId;
@@ -124,6 +104,14 @@ namespace E_CommerceBackEnd.API.Controllers
             return Ok();
         }
 
+
+        [HttpGet("[action]")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        public async Task<IActionResult> ChangeShowcaseImage([FromQuery]ChangeShowcaseImageCommandRequest changeShowcaseImageCommandRequest)
+        {
+            ChangeShowcaseImageCommandResponse changeShowcaseImageCommandResponse=await  _mediator.Send(changeShowcaseImageCommandRequest);
+            return Ok(changeShowcaseImageCommandResponse);
+        }
     }
 }
  

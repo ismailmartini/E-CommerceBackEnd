@@ -10,7 +10,7 @@ namespace E_CommerceBackEnd.Domain.Entities
     {
         //ef core table per hierarchy
 
-
+        public bool Showcase { get; set; }
         public ICollection<Product> Products { get; set; }
     }
 }
