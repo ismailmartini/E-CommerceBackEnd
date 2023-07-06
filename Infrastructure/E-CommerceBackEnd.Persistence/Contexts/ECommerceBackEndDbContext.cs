@@ -22,10 +22,26 @@ namespace E_CommerceBackEnd.Persistence.Contexts
         public DbSet<Order> Orders { get; set; }
         public DbSet<Customer> Customers { get; set; }
 
+        public DbSet<Basket> Baskets { get; set; }
+        public DbSet<BasketItem> BasketItems { get; set; }
+
         //ef core table per hierarchy
         public DbSet<Domain.Entities.File> Files { get; set; }
         public DbSet<ProductImageFile> ProductImageFiles { get; set; }
         public DbSet<InvoiceFile> InvoiceFiles { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Order>()
+                .HasKey(b => b.Id); //pk
+
+            builder.Entity<Basket>()
+                .HasOne(b => b.Order)
+                .WithOne(o=>o.Basket)
+                .HasForeignKey<Order>(b=>b.Id);//fk
+
+            base.OnModelCreating(builder); //IdentityDbContext kullandığımzı için bunu ekliyoruz
+        }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
