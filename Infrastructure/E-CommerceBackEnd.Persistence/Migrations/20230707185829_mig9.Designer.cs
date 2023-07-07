@@ -3,6 +3,7 @@ using System;
 using E_CommerceBackEnd.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace E_CommerceBackEnd.Persistence.Migrations
 {
     [DbContext(typeof(ECommerceBackEndDbContext))]
-    partial class ECommerceBackEndDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230707185829_mig9")]
+    partial class mig9
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -239,8 +242,14 @@ namespace E_CommerceBackEnd.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid>("BasketId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CustomerId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -250,6 +259,8 @@ namespace E_CommerceBackEnd.Persistence.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Orders");
                 });
@@ -454,6 +465,10 @@ namespace E_CommerceBackEnd.Persistence.Migrations
 
             modelBuilder.Entity("E_CommerceBackEnd.Domain.Entities.Order", b =>
                 {
+                    b.HasOne("E_CommerceBackEnd.Domain.Entities.Customer", null)
+                        .WithMany("Orders")
+                        .HasForeignKey("CustomerId");
+
                     b.HasOne("E_CommerceBackEnd.Domain.Entities.Basket", "Basket")
                         .WithOne("Order")
                         .HasForeignKey("E_CommerceBackEnd.Domain.Entities.Order", "Id")
@@ -535,6 +550,11 @@ namespace E_CommerceBackEnd.Persistence.Migrations
 
                     b.Navigation("Order")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("E_CommerceBackEnd.Domain.Entities.Customer", b =>
+                {
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("E_CommerceBackEnd.Domain.Entities.Identity.AppUser", b =>

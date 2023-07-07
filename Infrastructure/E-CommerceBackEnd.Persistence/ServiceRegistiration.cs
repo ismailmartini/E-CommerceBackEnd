@@ -55,6 +55,9 @@ namespace E_CommerceBackEnd.Persistence
          services.AddScoped<IExternalAuthentication, AuthService>();
          services.AddScoped<IInternalAuthentication, AuthService>();
          services.AddScoped<IBasketService, BasketService>();
+         services.AddScoped<IOrderService, OrderService>();
+
+
         }
 
 
