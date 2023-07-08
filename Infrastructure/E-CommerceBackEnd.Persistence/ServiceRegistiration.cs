@@ -7,12 +7,9 @@ using E_CommerceBackEnd.Persistence.Repositories;
 using E_CommerceBackEnd.Persistence.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Identity;
+
 
 namespace E_CommerceBackEnd.Persistence
 {
@@ -31,7 +28,10 @@ namespace E_CommerceBackEnd.Persistence
              options.Password.RequireLowercase=false;
              options.Password.RequireUppercase=false;
               
-         }).AddEntityFrameworkStores<ECommerceBackEndDbContext>();
+         }).AddEntityFrameworkStores<ECommerceBackEndDbContext>()
+         .AddDefaultTokenProviders();
+
+
          services.AddScoped<ICostumerReadRepository,CustomerReadRepository>(); 
          services.AddScoped<ICustomerWriteRepository,CustomerWriteRepository>(); 
          services.AddScoped<IOrderReadRepository,OrderReadRepository>(); 
