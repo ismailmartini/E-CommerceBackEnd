@@ -1,7 +1,9 @@
 ﻿
+using E_CommerceBackEnd.Application.Abstractions.Services;
 using E_CommerceBackEnd.Application.Abstractions.Storage;
 using E_CommerceBackEnd.Application.Abstractions.Token;
 using E_CommerceBackEnd.Infrastructure.Enums;
+using E_CommerceBackEnd.Infrastructure.Services;
 using E_CommerceBackEnd.Infrastructure.Services.Storage;
 using E_CommerceBackEnd.Infrastructure.Services.Storage.Azure;
 using E_CommerceBackEnd.Infrastructure.Services.Storage.Local;
@@ -17,6 +19,7 @@ namespace E_CommerceBackEnd.Infrastructure
         {
             serviceCollection.AddScoped<IStorageService, StorageService>();
             serviceCollection.AddScoped<ITokenHandler, TokenHandler>();
+            serviceCollection.AddScoped<IMailService, MailService>();
         }
 
         public static void AddStorage<T>(this IServiceCollection serviceCollection) where T : Storage, IStorage

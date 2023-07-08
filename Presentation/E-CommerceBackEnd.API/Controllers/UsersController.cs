@@ -1,4 +1,5 @@
-﻿using E_CommerceBackEnd.Application.Features.Commands.AppUser.CreateUser;
+﻿using E_CommerceBackEnd.Application.Abstractions.Services;
+using E_CommerceBackEnd.Application.Features.Commands.AppUser.CreateUser;
 using E_CommerceBackEnd.Application.Features.Commands.AppUser.FacebookLogin;
 using E_CommerceBackEnd.Application.Features.Commands.AppUser.GoogleLogin;
 using E_CommerceBackEnd.Application.Features.Commands.AppUser.LoginUser;
@@ -14,10 +15,11 @@ namespace E_CommerceBackEnd.API.Controllers
     {
 
         readonly IMediator _mediator;
-
-        public UsersController(IMediator mediator)
+        readonly IMailService _mailService;
+        public UsersController(IMediator mediator, IMailService mailService)
         {
             _mediator = mediator;
+            _mailService = mailService;
         }
 
         [HttpPost]
@@ -27,7 +29,12 @@ namespace E_CommerceBackEnd.API.Controllers
 
             return Ok(response);
         }
-  
-       
+
+        [HttpGet]
+        public async Task<IActionResult> ExampleMailTest()
+        {
+            await _mailService.SendMessageAsync("test@gmail.com", "Örnek Mail", "<strong>Bu bir örnek maildir.</strong>");
+            return Ok();
+        }
     }
 }

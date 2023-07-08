@@ -11,6 +11,7 @@ namespace E_CommerceBackEnd.Application.DTOs.Order
     {
         public string? BasketId { get; set; }
         public string Description { get; set; }
+
         public string Address { get; set; }
     
     }
