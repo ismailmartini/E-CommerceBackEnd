@@ -25,6 +25,8 @@ namespace E_CommerceBackEnd.Persistence.Contexts
         public DbSet<Basket> Baskets { get; set; }
         public DbSet<BasketItem> BasketItems { get; set; }
 
+        public DbSet<CompletedOrder> CompletedOrders { get; set; }
+
         //ef core table per hierarchy
         public DbSet<Domain.Entities.File> Files { get; set; }
         public DbSet<ProductImageFile> ProductImageFiles { get; set; }
@@ -44,6 +46,10 @@ namespace E_CommerceBackEnd.Persistence.Contexts
                 .WithOne(o=>o.Basket)
                 .HasForeignKey<Order>(b=>b.Id);//fk
 
+            builder.Entity<Order>()
+                .HasOne(o=>o.CompletedOrder)
+                .WithOne(c=>c.Order)
+                .HasForeignKey<CompletedOrder>(c=>c.OrderId);
 
 
             base.OnModelCreating(builder); //IdentityDbContext kullandığımzı için bunu ekliyoruz
