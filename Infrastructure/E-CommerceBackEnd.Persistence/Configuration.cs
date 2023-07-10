@@ -15,10 +15,19 @@ namespace E_CommerceBackEnd.Persistence
 
                 ConfigurationManager configurationManager = new();
                 configurationManager.SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../../Presentation/E-CommerceBackEnd.API"));
-                configurationManager.AddJsonFile("appsettings.json");
+                try
+                {
+                    configurationManager.AddJsonFile("appsettings.json");
+                
+                }
+                catch  
+                {
+                    //release mode in azure                  
+                     configurationManager.AddJsonFile("appsettings.production.json");
+                   
+                }
+
                 return configurationManager.GetConnectionString("PostgreSQL");
-
-
             }
         }
     }
